@@ -65,6 +65,7 @@ function mostrarGifs(gifs) {
 //MOSTRAR DATOS TRENDING
 
 const textSearchSection = document.querySelector(".search-section");
+const searchSectionH2=document.querySelector(".search-section h2");
 const changeTextContent = textSearchSection.children[4];
 console.log(changeTextContent);
 const resultsTittle = document.querySelector(
@@ -98,10 +99,19 @@ const sinResultadosContainer = document.querySelector(
 //BUSCADOR LISTENER
 search.addEventListener("input", (e) => {
   const busqueda = e.target.value;
+  let busquedaFinal=[]
+  for(let i=0;i<busqueda.length;i++){
+    busquedaFinal.push(busqueda);
+    console.log(busquedaFinal)
+  }
+  
+  
   if (busqueda === "") {
     autoCompleteContainer.style.display = "none";
     resultadosContainer.style.display = "none";
     resultadosBusqueda.style.display = "none";
+    searchSectionH2.style.display="flex";
+    searchSectionH2.nextElementSibling.style.display="flex";
     limpiarBusqueda();
   } else {
     autoCompleteContainer.style.display = "block";
@@ -115,10 +125,13 @@ search.addEventListener("input", (e) => {
   search.addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
       e.preventDefault();
-      dataSearch(busqueda);
+      dataSearch(busquedaFinal);
       resultadosContainer.style.display = "flex";
       resultadosBusqueda.style.display = "flex";
-      sinResultadosContainer.stlye.display = "none";
+      sinResultadosContainer.style.display = "none";
+      searchSectionH2.style.display="none";
+      searchSectionH2.nextElementSibling.style.display="none";
+      autoCompleteContainer.style.display="none";
       
     }
   });
@@ -135,13 +148,24 @@ function dataSearchAutoComplete(busqueda) {
 }
 
 //MOSTRAR RESULTADOS AUTOCOMPLETADO-API
-for (let i = 0; i < autoCompletateResults.length; i++) {}
+for (let i = 0; i < autoCompletateResults.length; i++) {
+}
 
 function autoCompletado(respuesta) {
   for (let i = 0; i < respuesta.length; i++) {
     const opciones = respuesta[i].name;
     autoCompletateResults[i].textContent = opciones;
   }
+}
+//BUSQUEDA POR AUTOCOMPLETADO
+const autoCompleteItems=document.querySelectorAll(".autocomplete-items");
+for(let i=0;i<autoCompleteItems.length;i++){
+  autoCompleteItems[i].addEventListener("click",()=>{
+dataSearch(autoCompleteItems[i].children[1].textContent)
+search.value=autoCompleteItems[i].children[1].textContent;
+resultsTittle.textContent = autoCompleteItems[i].children[1].textContent;
+autoCompleteContainer.style.display="none";
+  })
 }
 
 function dataSearch(busqueda) {
@@ -185,6 +209,8 @@ function mostrarGifsBusqueda(respuesta) {
     resultadosContainer.style.display = "flex";
     sinResultadosContainer.style.display = "none";
   }
+  searchSectionH2.style.display="none";
+searchSectionH2.nextElementSibling.style.display="none";
 }
 
     /*window.addEventListener("scroll",(e)=>{
