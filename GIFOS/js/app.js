@@ -6,8 +6,8 @@ const lang = "es";
 
 //OBTENER GIFS TRENDING DESDE  GIPHY
 
-function obtenerDatos() {
-  const url = `https://api.giphy.com/v1/gifs/trending?api_key=${apikey}&limit=${limit}&rating=${rating}`;
+async function obtenerDatos() {
+  const url = await `https://api.giphy.com/v1/gifs/trending?api_key=${apikey}&limit=${limit}&rating=${rating}`;
   fetch(url)
     .then((respuesta) => respuesta.json())
     .then((gifs) => mostrarGifs(gifs.data));
@@ -122,7 +122,7 @@ search.addEventListener("input", (e) => {
 
   //BUSCADOR GIFOS-API
 
-  search.addEventListener("keyup", (e) => {
+  search.addEventListener("keydown", (e) => {
     if (e.keyCode === 13) {
       e.preventDefault();
       dataSearch(busquedaFinal);

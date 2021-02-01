@@ -249,8 +249,9 @@ footer p {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-right: 156px;
-  margin-left: 156px;
+  margin-right: 5%;
+  margin-left: 5%;
+  justify-content: center;
 }
 
 .favs-gifs img {
@@ -1247,4 +1248,18 @@ body.dark .trending-text-container-busqueda h2.expand {
 .img-color-container-busqueda.expand {
   position: relative;
   margin: unset;
+}
+.favs-gifs .img-color-container{
+  position: relative;
+    margin: 10px;
+}
+
+.favs-gifs .img-color-container .img-width-height{
+  width: 260px;
+    height: 200px;
+    margin: unset;
+}
+.favs-gifs .img-color-container .img-width-height .img-container{
+  width: 260px;
+    height: 200px;
 }
