@@ -11,6 +11,8 @@ function cargarModo() {
   } else {
     agregarClase.classList.remove("dark");
   }
+  //MOSTRAR FAVORITOS DEL LOCALSTORAGE
+  mostrarFavoritos();
 }
 
 cambiarModo.children[0].addEventListener("click", modoNocturno);
@@ -53,10 +55,15 @@ gifsContainer.forEach((iterar) => {
       agregarClase.classList.add("expand");
     }
     //CERRAR GIF
-    closeGif.addEventListener("click", () => {
+    closeGif.addEventListener("click", async () => {
       modalContainer.style.display = "none";
-      closeGif.nextElementSibling.remove();
-      agregarClase.classList.remove("expand");
+
+      if (!closeGif.nextElementSibling) {
+        return;
+      } else {
+        closeGif.nextElementSibling.remove();
+        agregarClase.classList.remove("expand");
+      }
     });
   });
 });
@@ -105,21 +112,122 @@ sliderRight.addEventListener("click", () => {
 sliderLeft.addEventListener("click", () => {
   containerCarrousel.scrollLeft -= containerCarrousel.offsetWidth;
 });
+
 //GIFS A FAVORITOS
 const favsContainer = document.querySelector(".favs-gifs");
+const favsNoContent = document.querySelector(".favs-no-content");
+const verMasBtnContainer = document.querySelector(".ver-mas-btn-container");
+const favsSection = document.querySelector(".favourites");
+const gifsContainerBusqueda = document.querySelectorAll(
+  ".img-color-container-busqueda"
+);
 
+let favsArray = [];
 gifsContainer.forEach((i) => {
   i.addEventListener("click", (e) => {
     if (e.target.classList.contains("trending-fav")) {
       i.children[1].children[0].children[0].classList.toggle("active");
       if (i.children[1].children[0].children[0].classList.contains("active")) {
-        favsContainer.appendChild(i);
+        //favsContainer.appendChild(i);
+        const favsObject = {
+          title: `${i.children[0].alt}`,
+          url: `${i.children[0].src}`,
+          id: `${i.children[0].id}`,
+          user: `${i.children[1].children[1].children[0].textContent}`,
+          state: `${i.children[1].children[0].children[0].classList}`,
+        };
+        favsArray.push(favsObject);
+        localStorage.setItem("favoritos", JSON.stringify(favsArray));
       } else {
-        favsContainer.nextElementSibling.remove(i);
       }
     }
   });
 });
+gifsContainerBusqueda.forEach((i) => {
+  i.addEventListener("click", (e) => {
+    if (e.target.classList.contains("trending-fav")) {
+      i.children[1].children[0].children[0].classList.toggle("active");
+      if (i.children[1].children[0].children[0].classList.contains("active")) {
+        //favsContainer.appendChild(i);
+        const favsObject = {
+          title: `${i.children[0].alt}`,
+          url: `${i.children[0].src}`,
+          id: `${i.children[0].id}`,
+          user: `${i.children[1].children[1].children[0].textContent}`,
+          state: `${i.children[1].children[0].children[0].classList}`,
+        };
+        favsArray.push(favsObject);
+        localStorage.setItem("favoritos", JSON.stringify(favsArray));
+      } else {
+      }
+    }
+  });
+});
+
+//OBTENER GIFS DESDE LOCALSTORAGE Y MOSTRARLOS EN PANTALLA
+
+async function mostrarFavoritos() {
+  const localStorageFavs = localStorage.getItem("favoritos");
+  favsArray = await JSON.parse(localStorageFavs);
+  if (favsArray != "") {
+    favsNoContent.style.display = "none";
+  }
+  favsArray.forEach((i) => {
+    const divFavsItems = document.createElement("div");
+    divFavsItems.classList.add("img-color-container");
+    const imgFavsItems = document.createElement("img");
+    imgFavsItems.classList.add("img-width-height");
+    imgFavsItems.src = i.url;
+    imgFavsItems.alt = i.title;
+    imgFavsItems.id = i.id;
+    const divImgContainer = document.createElement("div");
+    divImgContainer.classList.add("img-container");
+    const divImgIcons = document.createElement("div");
+    divImgIcons.classList.add("img-icons");
+    const svgElementFav = document.createElement("svg");
+    const svgElementDown = document.createElement("svg");
+    const svgElementMax = document.createElement("svg");
+    svgElementFav.classList = i.state;
+    svgElementDown.classList.add("trending-download");
+    svgElementMax.classList.add("trending-max");
+    const divTrendingText = document.createElement("div");
+    divTrendingText.classList.add("trending-text-container");
+    const divTrendingTextP = document.createElement("p");
+    divTrendingTextP.textContent = i.user;
+    const divTrendingTextH2 = document.createElement("h2");
+    divTrendingTextH2.textContent = i.title;
+    favsContainer.appendChild(divFavsItems);
+    divFavsItems.appendChild(imgFavsItems);
+    divFavsItems.appendChild(divImgContainer);
+    divImgContainer.appendChild(divImgIcons);
+    divImgIcons.appendChild(svgElementFav);
+    divImgIcons.appendChild(svgElementDown);
+    divImgIcons.appendChild(svgElementMax);
+    divImgContainer.appendChild(divTrendingText);
+    divTrendingText.appendChild(divTrendingTextP);
+    divTrendingText.appendChild(divTrendingTextH2);
+  });
+}
+
+favsContainer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("trending-fav")) {
+    e.target.classList.remove("active");
+    const elementClickedId =
+      e.target.parentNode.parentNode.parentNode.children[0].id;
+
+    for (let i = 0; i < favsArray.length; i++) {
+      if (favsArray[i].id == elementClickedId) {
+        favsArray.splice(i, 1);
+      }
+      localStorage.setItem("favoritos", JSON.stringify(favsArray));
+    }
+    e.target.parentNode.parentNode.parentNode.remove();
+    if (console.log(favsContainer.childNodes.length==0)) {
+      favsNoContent.style.display="flex"
+    }
+  }
+});
+
 
 //if(sliderLeft.addEventListener("click",()=>{containerCarrousel.scrollLeft-=containerCarrousel.offsetWidth}));
 /*
