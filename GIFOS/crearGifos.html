@@ -51,11 +51,33 @@
                     <div class="corner-left-2"></div>
                 </div>
                 <div class="crea-tu-gifo-content">
-                    <h2>Aquí podrás <br>crear tus propios <span>GIFOS</span></h2>
-                    <p>
-                        ¡Crea tu GIFO en sólo 3 pasos!
-                    </p>
-                    <p>(sólo necesitas una cámara para grabar un video)</p>
+                    <div class="paso-uno">
+                        <h2>Aquí podrás <br>crear tus propios <span>GIFOS</span></h2>
+                        <p>
+                            ¡Crea tu GIFO en sólo 3 pasos!
+                        </p>
+                        <p>(sólo necesitas una cámara para grabar un video)</p>
+                    </div>
+                    <div class="paso-dos">
+                        <h2>¿Nos das acceso<br>
+                            a tu cámara?</h2>
+                        <p>
+                            El acceso a tu camara será válido sólo
+                        </p>
+                        <p>por el tiempo en el que estés creando el GIFO.
+
+                        </p>
+
+
+
+                    </div>
+                    <div class="paso-tres">
+                        <video src="">
+
+                        </video>
+                        <img src="">
+                    </div>
+
                 </div>
                 <div class="right-corners">
                     <div class="corner-right"></div>
@@ -66,31 +88,40 @@
         </section>
         <div class="pasos-a-seguir">
             <DIV class="paso-a-paso-div">
-            <div class="paso-a-paso">
-                1
-            </div>
-            <div class="paso-a-paso">
-                2
-            </div>
-            <div class="paso-a-paso">
-                3
-            </div>
-        </DIV>
-        <DIV class="pelicula-position">
-            <svg class="pelicula"></svg>
-        </DIV>
+                <div class="paso-a-paso">
+                    1
+                </div>
+                <div class="paso-a-paso">
+                    2
+                </div>
+                <div class="paso-a-paso">
+                    3
+                </div>
+            </DIV>
+            <DIV class="pelicula-position">
+                <svg class="pelicula"></svg>
+            </DIV>
         </div>
         <div class="border-and-btn">
             <div class="crea-tu-gifo-border">
 
             </div>
             <div>
-                    <button type="button" id="ver-mas-btn" class="mas-btn">COMENZAR</button>
+                <button type="button" id="ver-mas-btn" class="mas-btn">COMENZAR</button>
             </div>
-            
+            <div>
+                <button type="button" id="grabar-btn" class="mas-btn">GRABAR</button>
+            </div>
+            <div>
+                <button type="button" id="finalizar-btn" class="mas-btn">FINALIZAR</button>
+            </div>
+            <div>
+                <button type="button" id="upload-btn" class="mas-btn">SUBIR GIFO</button>
+            </div>
+
         </div>
-        
-        
+
+
         <footer>
             <div>
                 <p class="footer-p">Compartir en:</p>
@@ -104,9 +135,11 @@
             <p class="rights">© GIFOS 2020 All Rights Reserved.</p>
         </footer>
     </main>
+    <script src="js/record.js"></script>
+    <script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/burger.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/burger.js"></script>
 </body>
 
 </html>

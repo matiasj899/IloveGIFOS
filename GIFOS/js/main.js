@@ -4,7 +4,7 @@ const agregarClase = document.querySelector("body");
 const darkMode = localStorage.getItem("dark-mode");
 document.addEventListener("DOMContentLoaded", cargarModo);
 
-function cargarModo() {
+ function cargarModo() {
   if (darkMode === "true") {
     agregarClase.classList.add("dark");
     cambiarModo.children[0].textContent = "MODO DIURNO";
@@ -12,7 +12,7 @@ function cargarModo() {
     agregarClase.classList.remove("dark");
   }
   //MOSTRAR FAVORITOS DEL LOCALSTORAGE
-  mostrarFavoritos();
+  mostrarFavoritos(); 
 }
 
 cambiarModo.children[0].addEventListener("click", modoNocturno);
@@ -65,6 +65,9 @@ gifsContainer.forEach((iterar) => {
         agregarClase.classList.remove("expand");
       }
     });
+    if (e.target.classList.contains("trending-download")) {
+      downloadGif(e);
+    }
   });
 });
 //AGRANDAR GIF-BUSCADOR
@@ -95,6 +98,9 @@ imgColorContainerBusquedaExpand.forEach((iterar) => {
       closeGif.nextElementSibling.remove();
       agregarClase.classList.remove("expand");
     });
+    if (e.target.classList.contains("trending-download")) {
+      downloadGif(e);
+    }
   });
 });
 
@@ -222,12 +228,62 @@ favsContainer.addEventListener("click", (e) => {
       localStorage.setItem("favoritos", JSON.stringify(favsArray));
     }
     e.target.parentNode.parentNode.parentNode.remove();
-    if (console.log(favsContainer.childNodes.length==0)) {
-      favsNoContent.style.display="flex"
+    if (console.log(favsContainer.childNodes.length == 0)) {
+      favsNoContent.style.display = "flex";
     }
+  }
+  //AGRANDAR GIFS FAVORITOS
+  if (e.target.classList.contains("trending-max")) {
+    const elementClickedGif = e.target.parentNode.parentNode.parentNode;
+    console.log(elementClickedGif);
+    const elementClone = elementClickedGif.cloneNode(true);
+    modal.appendChild(elementClone);
+    modalContainer.style.display = "block";
+    elementClone.children[0].classList.add("expand");
+    elementClone.children[1].classList.add("expand");
+    elementClone.children[1].children[0].classList.add("expand");
+    elementClone.children[1].children[0].children[1].classList.add("expand");
+    elementClone.children[1].children[0].children[2].classList.add("expand");
+    elementClone.children[1].children[1].classList.add("expand");
+    elementClone.children[1].children[1].children[0].classList.add("expand");
+    elementClone.children[1].children[1].children[1].classList.add("expand");
+    modal.children[0].classList.add("expand");
+    agregarClase.classList.add("expand");
+    //CERRAR GIF
+    closeGif.addEventListener("click", () => {
+      modalContainer.style.display = "none";
+      closeGif.nextElementSibling.remove();
+      agregarClase.classList.remove("expand");
+    });
+  }
+  //DESCARGAR GIFS
+  if (e.target.classList.contains("trending-download")) {
+    downloadGif(e);
   }
 });
 
+function downloadGif(e) {
+  const url = e.target.parentNode.parentNode.parentNode.children[0].src;
+  const elementClickedName =
+    e.target.parentNode.parentNode.parentNode.children[0].alt;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.responseType = "blob";
+  xhr.onload = function () {
+    let urlCreator = window.URL || window.webkitURL;
+    let imageUrl = urlCreator.createObjectURL(this.response);
+    let tag = document.createElement("a");
+    tag.href = imageUrl;
+    tag.download = elementClickedName;
+    document.body.appendChild(tag);
+    tag.click();
+    document.body.removeChild(tag);
+  };
+  xhr.send();
+}
+
+ 
 
 //if(sliderLeft.addEventListener("click",()=>{containerCarrousel.scrollLeft-=containerCarrousel.offsetWidth}));
 /*
