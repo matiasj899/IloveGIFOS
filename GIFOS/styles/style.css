@@ -1263,3 +1263,26 @@ body.dark .trending-text-container-busqueda h2.expand {
   width: 260px;
     height: 200px;
 }
+.crea-tu-gifo-content .paso-dos,.paso-tres{
+  display:none;
+}
+.crea-tu-gifo-content .paso-tres video{
+  width: 480px;
+  height: 320px;
+
+}
+.crea-tu-gifo-content .paso-tres img{
+  display: none;
+  width: 480px;
+  height: 320px;
+
+}
+#grabar-btn{
+  display: none;
+}
+#finalizar-btn{
+  display: none;
+}
+#upload-btn{
+  display: none;
+}
