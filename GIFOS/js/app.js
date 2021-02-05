@@ -1,4 +1,4 @@
-const apikey = "B9300a57dibi1KrwNPmk2H7J6ocLUl2N";
+const apikey = "KRtmX9CWsEGoTRAZgh6jx2eg9N7Zezg7";
 const limit = 32;
 const offset = 0;
 const rating = "g";

@@ -1,9 +1,10 @@
-const apiKey = "B9300a57dibi1KrwNPmk2H7J6ocLUl2N";
+const apiKey = "KRtmX9CWsEGoTRAZgh6jx2eg9N7Zezg7";
 const comenzarBtn = document.querySelector(".border-and-btn").children[1]
   .children[0];
 const pasoUno = document.querySelector(".paso-uno");
 const pasoDos = document.querySelector(".paso-dos");
 const pasoTres = document.querySelector(".paso-tres");
+const avisoDiv=document.querySelector(".copiado-portapapeles")
 let cameraRecording = pasoTres.children[0];
 let gifRecording = pasoTres.children[1];
 const grabarBtn = document.querySelector("#grabar-btn");
@@ -11,6 +12,8 @@ const finalizarBtn = document.querySelector("#finalizar-btn");
 const uploadBtn = document.querySelector("#upload-btn");
 const pasoAPasoDiv=document.querySelector(".paso-a-paso-div")
 const animationCamera=document.querySelector(".camara-luz");
+const loaderSvg=document.createElement("svg");
+const loaderP=document.createElement("p");
 
 comenzarBtn.addEventListener("click", cameraAccess);
 
@@ -92,7 +95,7 @@ function createGifFile(recorder) {
 function subirGif(gif) {
   uploadBtn.addEventListener("click",()=>{
     fetch(
-      `https://upload.giphy.com/v1/gifs?api_key=B9300a57dibi1KrwNPmk2H7J6ocLUl2N`,
+      `https://upload.giphy.com/v1/gifs?api_key=KRtmX9CWsEGoTRAZgh6jx2eg9N7Zezg7`,
       {
         method: "POST",
         body: gif,
@@ -125,8 +128,8 @@ uploadGifStyle.children[0].children[1].classList.add("icon-link");
 
 const loaderAndPContainer=document.createElement("div")
 loaderAndPContainer.classList.add("loader-and-p-container")
-      const loaderSvg=document.createElement("svg");
-      const loaderP=document.createElement("p");
+     
+      
       loaderSvg.classList.add("loader-svg")
       loaderP.textContent="Estamos subiendo tu GIFO"
       loaderAndPContainer.appendChild(loaderSvg);
@@ -139,7 +142,7 @@ loaderAndPContainer.classList.add("loader-and-p-container")
   
 
           function respuestaGif(response){
-            console.log(response)
+           const dataId=response.data.id;
           if(response.meta.msg!="OK"){
             loaderSvg.style.background="unset"
             loaderP.textContent="Algo ha salido mal, Vuelve a intentarlo"
@@ -151,20 +154,77 @@ loaderAndPContainer.classList.add("loader-and-p-container")
             loaderP.textContent="GIFO subido con éxito"
             iconsContainer.style.display="flex"
             loaderAndPContainer.style.height="80%"
-            descargarGif(downloadBtn)
+            traerGifId(dataId,downloadBtn,linkBtn)
+            
             
 
           }
         }
       
   })
+  function traerGifId(dataId,downloadBtn,linkBtn){
+console.log(dataId)
+const urlId=`https://api.giphy.com/v1/gifs/${dataId}?api_key=KRtmX9CWsEGoTRAZgh6jx2eg9N7Zezg7`;
+fetch(urlId)
+.then((resultados) => resultados.json())
+    .then((respuesta) => descargarGifLink(respuesta,downloadBtn,linkBtn))
+  }
+;
+
+function descargarGifLink(respuesta,downloadBtn,linkBtn){
+  const url=respuesta.data.images.original.url
+  const gifName=respuesta.data.title
   
-function descargarGif(downloadBtn){
+
   downloadBtn.addEventListener("click",()=>{
-console.log("clcik")
-  })
+    
+    const xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.responseType = "blob";
+  xhr.onload = function () {
+    let urlCreator = window.URL || window.webkitURL;
+    let imageUrl = urlCreator.createObjectURL(this.response);
+    let tag = document.createElement("a");
+    tag.href = imageUrl;
+    tag.download = gifName;
+    document.body.appendChild(tag);
+    tag.click();
+    document.body.removeChild(tag);
+  };
+  xhr.send();
+
+      })
+
+  linkBtn.addEventListener("click",()=>{
+    const textArea=document.createElement("input")
+    textArea.setAttribute("value",url)
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand("copy")
+    document.body.removeChild(textArea)
+    loaderSvg.style.background="unset"
+      loaderP.textContent="GIFO copiado al portapapeles"
+    
+setTimeout(() => {
+  loaderSvg.style.background="url(/styles/check.svg) no-repeat"
+  loaderP.textContent="GIFO subido con éxito"
+}, 2000);
+    //AVISO TEXTO COPIADO
+
+    
+
+        console.log(url)
+      })
 }
 
 
+
+ 
+
+
+
 }
+
+
+ 
 
