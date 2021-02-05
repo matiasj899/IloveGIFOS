@@ -1288,6 +1288,22 @@ body.dark .trending-text-container-busqueda h2.expand {
   height: 320px;
 
 }
+.crea-tu-gifo-content  .copiado-portapapeles{
+  
+  display: none;
+    width: 440px;
+    opacity: 0.8;
+    flex-direction: column;
+    justify-content: center;
+    height: 90px;
+    background-color: #50e3c2;
+}
+.crea-tu-gifo-content  .copiado-portapapeles .copiado-portapapeles-p{
+  font-family:"Montserrat", sans-serif;
+  font-size: 15px;
+  color: #FFFFFF;
+  text-align: center;
+}
 .crea-tu-gifo-content .paso-tres .layout-container{
   opacity: 0.6;
   background: #572EE5;
