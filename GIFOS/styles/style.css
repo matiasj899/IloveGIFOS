@@ -939,8 +939,19 @@ body.dark .modal-container {
 
 .camara-luz {
   margin-bottom: 15px;
+  animation: unset;
 }
-
+@keyframes parpadeo {
+  0%{
+    opacity: 0.2;
+  }
+  50%{
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
 .pelicula {
   background: url(pelicula.svg) no-repeat;
   width: 142px;
@@ -1277,6 +1288,37 @@ body.dark .trending-text-container-busqueda h2.expand {
   height: 320px;
 
 }
+.crea-tu-gifo-content .paso-tres .layout-container{
+  opacity: 0.6;
+  background: #572EE5;
+  width: 480px;
+  height: 320px;
+display: none;
+flex-direction: column;
+flex-wrap: wrap;
+position: relative;
+}
+.crea-tu-gifo-content .paso-tres .layout-container .loader-svg{
+background: url(/styles/loader.svg) ;
+width: 22px;
+height: 22px;
+animation: loader  5s linear infinite;
+}
+
+@keyframes loader{
+  0%{
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.crea-tu-gifo-content .paso-tres .layout-container p{
+  font-family:"Montserrat", sans-serif;
+font-size: 15px;
+color: #FFFFFF;
+text-align: center;
+}
 #grabar-btn{
   display: none;
 }
@@ -1285,4 +1327,33 @@ body.dark .trending-text-container-busqueda h2.expand {
 }
 #upload-btn{
   display: none;
+}
+.crea-tu-gifo-content .paso-tres .layout-container .icons-container{
+  display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.crea-tu-gifo-content .paso-tres .layout-container .icons-container .trending-download{
+  margin: 5px;
+  cursor: pointer;
+}
+.crea-tu-gifo-content .paso-tres .layout-container .icons-container .icon-link{
+  background: url(/styles/icon-link-normal.svg) no-repeat;
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(1px 1px 3px #918e8e);
+  margin: 5px;
+  cursor: pointer;
+}
+.crea-tu-gifo-content .paso-tres .layout-container .icons-container .icon-link:hover{
+  background: url(/styles/icon-link-hover.svg) no-repeat;
+}
+.crea-tu-gifo-content .paso-tres .layout-container .loader-and-p-container{
+  display: flex;
+    flex-direction: column;
+    FLEX-WRAP: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }

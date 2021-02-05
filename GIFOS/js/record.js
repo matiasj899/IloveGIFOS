@@ -1,98 +1,170 @@
-const apikey = "B9300a57dibi1KrwNPmk2H7J6ocLUl2N";
-const comenzarBtn=document.querySelector(".border-and-btn").children[1].children[0];
-const pasoUno=document.querySelector(".paso-uno");
-const pasoDos=document.querySelector(".paso-dos");
-const pasoTres=document.querySelector(".paso-tres");
-let cameraRecording=pasoTres.children[0];
-let gifRecording=pasoTres.children[1];
-const grabarBtn=document.querySelector("#grabar-btn")
-const finalizarBtn=document.querySelector("#finalizar-btn")
-const uploadBtn=document.querySelector("#upload-btn")
+const apiKey = "B9300a57dibi1KrwNPmk2H7J6ocLUl2N";
+const comenzarBtn = document.querySelector(".border-and-btn").children[1]
+  .children[0];
+const pasoUno = document.querySelector(".paso-uno");
+const pasoDos = document.querySelector(".paso-dos");
+const pasoTres = document.querySelector(".paso-tres");
+let cameraRecording = pasoTres.children[0];
+let gifRecording = pasoTres.children[1];
+const grabarBtn = document.querySelector("#grabar-btn");
+const finalizarBtn = document.querySelector("#finalizar-btn");
+const uploadBtn = document.querySelector("#upload-btn");
+const pasoAPasoDiv=document.querySelector(".paso-a-paso-div")
+const animationCamera=document.querySelector(".camara-luz");
 
-comenzarBtn.addEventListener("click",cameraAccess);
+comenzarBtn.addEventListener("click", cameraAccess);
 
-function cameraAccess(){
-pasoUno.style.display="none";
-pasoDos.style.display="block";
-comenzarBtn.style.display="none"
-    getStreamAndRecord();
+function cameraAccess() {
+  pasoUno.style.display = "none";
+  pasoAPasoDiv.children[0].style.background="#572EE5"
+  pasoAPasoDiv.children[0].style.color="#FFFFFF"
+  pasoDos.style.display = "block";
+  comenzarBtn.style.display = "none";
+  getStreamAndRecord();
 }
 
-function getStreamAndRecord () { 
-    navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: {
-       height: { max: 480 }
-    }
- })
- .then(function(stream) {
-     pasoDos.style.display="none"
-     pasoTres.style.display="block"
-     grabarBtn.style.display="block"
-     cameraRecording.srcObject = stream;
-     cameraRecording.play()
-     let recorder = RecordRTC(stream, {
-        type: 'gif',
-  frameRate: 1,
-  quality: 10,
-  width: 360,
-  hidden: 240,
+function getStreamAndRecord() {
+  navigator.mediaDevices
+    .getUserMedia({
+      audio: false,
+      video: {
+        height: { max: 480 },
+      },
+    })
+    .then(function (stream) {
+      pasoDos.style.display = "none";
+      
+      pasoTres.style.display = "block";
+      grabarBtn.style.display = "block";
+      cameraRecording.srcObject = stream;
+      cameraRecording.play();
+      let recorder = RecordRTC(stream, {
+        type: "gif",
+        frameRate: 1,
+        quality: 10,
+        width: 360,
+        hidden: 240,
+      });
+      grabarVideo(recorder);
     });
-     grabarVideo(recorder);
- })}
+}
 
- function grabarVideo(recorder){
-     grabarBtn.addEventListener("click",()=>{
-        recorder.startRecording();
-        console.log("grabando...")
-         grabarBtn.style.display="none";
-         finalizarBtn.style.display="block";
-     })
-     finalizarGrabacion(recorder);
- }
- 
- function finalizarGrabacion(recorder){
-     finalizarBtn.addEventListener("click",()=>{
-        recorder.stopRecording(function(){
-            let blob = recorder.getBlob();
-            gifRecording.src=URL.createObjectURL(blob);
-            cameraRecording.style.display="none";
-            gifRecording.style.display="block";
-            finalizarBtn.style.display="none";
-            uploadBtn.style.display="block";
-            createGifFile(recorder);
+function grabarVideo(recorder) {
+  grabarBtn.addEventListener("click", () => {
+    recorder.startRecording();
+    console.log("grabando...");
+    grabarBtn.style.display = "none";
+    finalizarBtn.style.display = "block";
+    animationCamera.style.animation="parpadeo 2s ease infinite"
+  });
+  finalizarGrabacion(recorder);
+}
+
+function finalizarGrabacion(recorder) {
+  finalizarBtn.addEventListener("click", () => {
+    recorder.stopRecording(function () {
+      let blob = recorder.getBlob();
+      gifRecording.src = URL.createObjectURL(blob);
+      pasoAPasoDiv.children[0].style.background="unset"
+  pasoAPasoDiv.children[0].style.color="#572EE5"
+      pasoAPasoDiv.children[1].style.background="#572EE5"
+  pasoAPasoDiv.children[1].style.color="#FFFFFF"
+  animationCamera.style.animation="unset"
+      cameraRecording.style.display = "none";
+      gifRecording.style.display = "block";
+      finalizarBtn.style.display = "none";
+      uploadBtn.style.display = "block";
+      createGifFile(recorder);
+    });
+  });
+}
+
+function createGifFile(recorder) {
+  let form = new FormData();
+  form.append("file", recorder.getBlob(), "myGif.gif");
+  console.log(form.get("file"));
+
+  //SUBIR GIF
+
+  subirGif(form);
+}
+
+function subirGif(gif) {
+  uploadBtn.addEventListener("click",()=>{
+    fetch(
+      `https://upload.giphy.com/v1/gifs?api_key=B9300a57dibi1KrwNPmk2H7J6ocLUl2N`,
+      {
+        method: "POST",
+        body: gif,
+      }
+    )
+      .then((data) => data.json())
+      .catch((error) => console.log("Error:", error))
+      .then((response) => respuestaGif(response));
+  
+      //ESTILOS AL SUBIR GIF
+      uploadBtn.style.display="none"
+      const uploadGifStyle=document.createElement("div");
+      uploadGifStyle.classList.add("layout-container");
+      pasoTres.appendChild(uploadGifStyle);
+      uploadGifStyle.style.display="flex"
+      gifRecording.style.position="absolute";
+      uploadGifStyle.style.position="relative";
+      //BOTONES DESCARGAR Y LINK
+const  iconsContainer=document.createElement("div");
+iconsContainer.style.display="none"
+const downloadBtn=document.createElement("svg");
+const linkBtn=document.createElement("svg");
+iconsContainer.appendChild(downloadBtn);
+iconsContainer.appendChild(linkBtn);
+uploadGifStyle.appendChild(iconsContainer);
+uploadGifStyle.children[0].classList.add("icons-container");
+uploadGifStyle.children[0].children[0].classList.add("trending-download");
+uploadGifStyle.children[0].children[1].classList.add("icon-link");
+//SUBIENDO GIF Y LOADER
+
+const loaderAndPContainer=document.createElement("div")
+loaderAndPContainer.classList.add("loader-and-p-container")
+      const loaderSvg=document.createElement("svg");
+      const loaderP=document.createElement("p");
+      loaderSvg.classList.add("loader-svg")
+      loaderP.textContent="Estamos subiendo tu GIFO"
+      loaderAndPContainer.appendChild(loaderSvg);
+      loaderAndPContainer.appendChild(loaderP)
+      uploadGifStyle.appendChild(loaderAndPContainer);
+      pasoAPasoDiv.children[1].style.background="unset"
+  pasoAPasoDiv.children[1].style.color="#572EE5"
+      pasoAPasoDiv.children[2].style.background="#572EE5"
+  pasoAPasoDiv.children[2].style.color="#FFFFFF"
+  
+
+          function respuestaGif(response){
+            console.log(response)
+          if(response.meta.msg!="OK"){
+            loaderSvg.style.background="unset"
+            loaderP.textContent="Algo ha salido mal, Vuelve a intentarlo"
+
+          }
+          else{
+            loaderSvg.style.animation="unset"
+            loaderSvg.style.background="url(/styles/check.svg) no-repeat"
+            loaderP.textContent="GIFO subido con éxito"
+            iconsContainer.style.display="flex"
+            loaderAndPContainer.style.height="80%"
+            descargarGif(downloadBtn)
             
-        })
-     })
-     
- }
 
- function createGifFile(recorder){
-    let form = new FormData();
-    const gifFile=form.append('file', recorder.getBlob(), 'myGif.gif');
-    console.log(gifFile);
-    uploadGif(gifFile);
-    
- }
-
- function uploadGif(gifFile){
-    
-     uploadBtn.addEventListener("click",()=>{
-        const urlUpload=`https://upload.giphy.com/v1/gifs/${apikey}`;
-        const required={
-            
-            file:`${gifFile}`
+          }
         }
+      
+  })
+  
+function descargarGif(downloadBtn){
+  downloadBtn.addEventListener("click",()=>{
+console.log("clcik")
+  })
+}
 
-        fetch (urlUpload,{
-            method:"PUT",
-            body: JSON.stringify(required),
-            headers:{
-                'Content-Type': 'application/json'}
-        })
-        .then((data)=>(data.json()))
-        .catch(error => console.log('Error:', error))
-        .then(response => console.log('Success:', response));
-     })
-    
- }
+
+}
+
