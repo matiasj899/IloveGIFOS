@@ -163,6 +163,12 @@ body.dark .search-container {
   line-height: 25px;
   margin-bottom: 95px;
 }
+.trending-results{
+  display: flex;
+}
+.trending-results-p{
+  cursor: pointer;
+}
 
 .trending-gifos {
   background-color: #f3f5f8;
@@ -1372,4 +1378,18 @@ text-align: center;
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+.remove-btn{
+  background: url(/styles/icon-trash-normal.svg);
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(1px 1px 3px #918e8e);
+  cursor: pointer;
+}
+.remove-btn:hover{
+  background: url(/styles/icon-trash-hover.svg);
+}
+
+.modal-content .img-color-container-busqueda{
+  margin: unset;
 }

@@ -32,11 +32,12 @@ function modoNocturno() {
 const modal = document.querySelector(".modal-content");
 const modalContainer = document.querySelector(".modal-container");
 const gifsContainers = document.querySelectorAll(".img-color-container");
+const imgContainer=document.querySelector(".img-container");
 const expandirImg = document.querySelector(".img-width-height");
 const gifsContainer = Array.from(gifsContainers);
 const closeGif = document.querySelector(".close-gif-container");
 const carrouselGifos = document.querySelector(".carrousel-gifos");
-
+//ANGRANDAR GIF-SLIDER
 gifsContainer.forEach((iterar) => {
   iterar.addEventListener("click", (e) => {
     const iterarClon = iterar.cloneNode(true);
@@ -46,6 +47,28 @@ gifsContainer.forEach((iterar) => {
       iterarClon.children[0].classList.add("expand");
       iterarClon.children[1].classList.add("expand");
       iterarClon.children[1].children[0].classList.add("expand");
+      iterarClon.children[1].children[0].children[0].addEventListener("click",(e)=>{
+        if (e.target.classList.contains("trending-fav")) {
+          e.target.classList.toggle("active");
+          if (iterarClon.children[1].children[0].children[0].classList.contains("active")) {
+            //favsContainer.appendChild(i);
+            const favsObject = {
+              title: `${iterarClon.children[0].alt}`,
+              url: `${iterarClon.children[0].src}`,
+              id: `${iterarClon.children[0].id}`,
+              user: `${iterarClon.children[1].children[1].children[0].textContent}`,
+              state: `${iterarClon.children[1].children[0].children[0].classList}`,
+            };
+            favsArray.push(favsObject);
+            localStorage.setItem("favoritos", JSON.stringify(favsArray));
+      }}})
+      iterarClon.children[1].children[0].children[1].addEventListener("click",(e)=>{
+        if (e.target.classList.contains("trending-download")) {
+          console.log("descargando...")
+          downloadGif(e);
+        }
+    
+      })
       iterarClon.children[1].children[0].children[1].classList.add("expand");
       iterarClon.children[1].children[0].children[2].classList.add("expand");
       iterarClon.children[1].children[1].classList.add("expand");
@@ -84,6 +107,28 @@ imgColorContainerBusquedaExpand.forEach((iterar) => {
       iterarClon.children[0].classList.add("expand");
       iterarClon.children[1].classList.add("expand");
       iterarClon.children[1].children[0].classList.add("expand");
+      iterarClon.children[1].children[0].children[0].addEventListener("click",(e)=>{
+        if (e.target.classList.contains("trending-fav")) {
+          e.target.classList.toggle("active");
+          if (iterarClon.children[1].children[0].children[0].classList.contains("active")) {
+            //favsContainer.appendChild(i);
+            const favsObject = {
+              title: `${iterarClon.children[0].alt}`,
+              url: `${iterarClon.children[0].src}`,
+              id: `${iterarClon.children[0].id}`,
+              user: `${iterarClon.children[1].children[1].children[0].textContent}`,
+              state: `${iterarClon.children[1].children[0].children[0].classList}`,
+            };
+            favsArray.push(favsObject);
+            localStorage.setItem("favoritos", JSON.stringify(favsArray));
+      }}})
+      iterarClon.children[1].children[0].children[1].addEventListener("click",(e)=>{
+        if (e.target.classList.contains("trending-download")) {
+          console.log("descargando...")
+          downloadGif(e);
+        }
+    
+      })
       iterarClon.children[1].children[0].children[1].classList.add("expand");
       iterarClon.children[1].children[0].children[2].classList.add("expand");
       iterarClon.children[1].children[1].classList.add("expand");
@@ -101,8 +146,127 @@ imgColorContainerBusquedaExpand.forEach((iterar) => {
     if (e.target.classList.contains("trending-download")) {
       downloadGif(e);
     }
+    
   });
+
+
 });
+//AGRANDAR trending VERSION MOBILE
+if (window.matchMedia("(max-width: 425px)").matches) {
+  console.log('La media query se cumple');
+  gifsContainer.forEach((iterar) => {
+    iterar.children[1].style.display="none"
+    iterar.addEventListener("click", (e) => {
+      const iterarClon = iterar.cloneNode(true);
+      if (e.target.classList.contains("img-width-height")) {
+        modal.appendChild(iterarClon);
+        modalContainer.style.display = "block";
+        iterarClon.children[0].classList.add("expand");
+        iterarClon.children[1].classList.add("expand");
+        iterarClon.children[1].style.display="flex"
+        iterarClon.children[1].children[0].classList.add("expand");
+        iterarClon.children[1].children[0].children[0].addEventListener("click",(e)=>{
+          if (e.target.classList.contains("trending-fav")) {
+            e.target.classList.toggle("active");
+            if (iterarClon.children[1].children[0].children[0].classList.contains("active")) {
+              //favsContainer.appendChild(i);
+              const favsObject = {
+                title: `${iterarClon.children[0].alt}`,
+                url: `${iterarClon.children[0].src}`,
+                id: `${iterarClon.children[0].id}`,
+                user: `${iterarClon.children[1].children[1].children[0].textContent}`,
+                state: `${iterarClon.children[1].children[0].children[0].classList}`,
+              };
+              favsArray.push(favsObject);
+              localStorage.setItem("favoritos", JSON.stringify(favsArray));
+        }}})
+        iterarClon.children[1].children[0].children[1].addEventListener("click",(e)=>{
+          if (e.target.classList.contains("trending-download")) {
+            console.log("descargando...")
+            downloadGif(e);
+          }
+      
+        })
+        iterarClon.children[1].children[0].children[2].classList.add("expand");
+        iterarClon.children[1].children[1].classList.add("expand");
+        iterarClon.children[1].children[1].children[0].classList.add("expand");
+        iterarClon.children[1].children[1].children[1].classList.add("expand");
+        modal.children[0].classList.add("expand");
+        agregarClase.classList.add("expand");
+      }
+      //CERRAR GIF
+      closeGif.addEventListener("click", async () => {
+        modalContainer.style.display = "none";
+  
+        if (!closeGif.nextElementSibling) {
+          return;
+        } else {
+          closeGif.nextElementSibling.remove();
+          agregarClase.classList.remove("expand");
+        }
+      });
+      
+    });
+  });
+
+  //AGRANDAR GIF MOBILE
+  imgColorContainerBusquedaExpand.forEach((iterar) => {
+    iterar.children[1].style.display="none"
+    iterar.addEventListener("click", (e) => {
+      const iterarClon = iterar.cloneNode(true);
+      if (e.target.classList.contains("img-width-height-busqueda")) {
+        modal.appendChild(iterarClon);
+        modalContainer.style.display = "block";
+        iterarClon.children[0].classList.add("expand");
+        iterarClon.children[1].classList.add("expand");
+        iterarClon.children[1].style.display="flex"
+        iterarClon.children[1].children[0].classList.add("expand");
+        iterarClon.children[1].children[0].children[0].addEventListener("click",(e)=>{
+          if (e.target.classList.contains("trending-fav")) {
+            e.target.classList.toggle("active");
+            if (iterarClon.children[1].children[0].children[0].classList.contains("active")) {
+              //favsContainer.appendChild(i);
+              const favsObject = {
+                title: `${iterarClon.children[0].alt}`,
+                url: `${iterarClon.children[0].src}`,
+                id: `${iterarClon.children[0].id}`,
+                user: `${iterarClon.children[1].children[1].children[0].textContent}`,
+                state: `${iterarClon.children[1].children[0].children[0].classList}`,
+              };
+              favsArray.push(favsObject);
+              localStorage.setItem("favoritos", JSON.stringify(favsArray));
+        }}})
+        iterarClon.children[1].children[0].children[1].addEventListener("click",(e)=>{
+          if (e.target.classList.contains("trending-download")) {
+            console.log("descargando...")
+            downloadGif(e);
+          }
+      
+        })
+        iterarClon.children[1].children[0].children[2].classList.add("expand");
+        iterarClon.children[1].children[1].classList.add("expand");
+        iterarClon.children[1].children[1].children[0].classList.add("expand");
+        iterarClon.children[1].children[1].children[1].classList.add("expand");
+        modal.children[0].classList.add("expand");
+        agregarClase.classList.add("expand");
+      }
+      //CERRAR GIF
+      closeGif.addEventListener("click", async () => {
+        modalContainer.style.display = "none";
+  
+        if (!closeGif.nextElementSibling) {
+          return;
+        } else {
+          closeGif.nextElementSibling.remove();
+          agregarClase.classList.remove("expand");
+        }
+      });
+      
+    });
+  });
+
+  
+}
 
 //VER MAS GIF
 const sliderRight = document.querySelector(".slider-right");
@@ -216,6 +380,64 @@ async function mostrarFavoritos() {
 }
 
 favsContainer.addEventListener("click", (e) => {
+  if (window.matchMedia("(max-width: 425px)").matches){
+    if (e.target.classList.contains("img-width-height")){
+      console.log("Asdas")
+      const elementClone = e.target.parentNode.cloneNode(true);
+    modal.appendChild(elementClone);
+    modalContainer.style.display = "block";
+    elementClone.children[0].classList.add("expand");
+    elementClone.children[1].classList.add("expand");
+    elementClone.children[1].children[0].classList.add("expand");
+    elementClone.children[1].children[0].children[1].classList.add("expand");
+    elementClone.children[1].children[0].children[2].classList.add("expand");
+    elementClone.children[1].children[1].classList.add("expand");
+    elementClone.children[1].children[1].children[0].classList.add("expand");
+    elementClone.children[1].children[1].children[1].classList.add("expand");
+    modal.children[0].classList.add("expand");
+    agregarClase.classList.add("expand");
+    //CERRAR GIF
+    closeGif.addEventListener("click", () => {
+      modalContainer.style.display = "none";
+      closeGif.nextElementSibling.remove();
+      agregarClase.classList.remove("expand");
+    });
+    elementClone.children[1].children[0].children[1].addEventListener("click",(e)=>{
+      console.log(e.target)
+      if (e.target.classList.contains("trending-download")) {
+        console.log("descargando...")
+        downloadGif(e);
+      }
+      
+      
+    })
+    elementClone.children[1].children[0].children[0].addEventListener("click",(e)=>{
+      if (e.target.classList.contains("trending-fav")) {
+        console.log("activo")
+        modalContainer.style.display = "none";
+      closeGif.nextElementSibling.remove();
+      agregarClase.classList.remove("expand");
+        e.target.classList.remove("active");
+        e.target.parentNode.parentNode.parentNode.remove();
+
+        const elementClickedId =
+          e.target.parentNode.parentNode.parentNode.children[0].id;
+    
+        for (let i = 0; i < favsArray.length; i++) {
+          if (favsArray[i].id == elementClickedId) {
+            favsArray.splice(i, 1);
+          }
+          localStorage.setItem("favoritos", JSON.stringify(favsArray));
+        }
+        e.target.parentNode.parentNode.parentNode.remove();
+        if (console.log(favsContainer.childNodes.length == 0)) {
+          favsNoContent.style.display = "flex";
+        }
+      }
+    })
+      
+    }
+  } 
   if (e.target.classList.contains("trending-fav")) {
     e.target.classList.remove("active");
     const elementClickedId =
@@ -256,6 +478,7 @@ favsContainer.addEventListener("click", (e) => {
       agregarClase.classList.remove("expand");
     });
   }
+  
   //DESCARGAR GIFS
   if (e.target.classList.contains("trending-download")) {
     downloadGif(e);
