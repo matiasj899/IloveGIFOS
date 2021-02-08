@@ -66,15 +66,35 @@ function mostrarGifs(gifs) {
 
 const textSearchSection = document.querySelector(".search-section");
 const searchSectionH2=document.querySelector(".search-section h2");
-const changeTextContent = textSearchSection.children[4];
+const changeTextContent=document.querySelectorAll(".trending-results-p")
+//const changeTextContent = textSearchSection.children[4].children[0];
 console.log(changeTextContent);
 const resultsTittle = document.querySelector(
   ".search-section .resultados-container h3"
 );
 
 function mostrarDatosTrending(dataTrending) {
+  
   const arrayDataTrending = dataTrending.data;
-  changeTextContent.textContent = arrayDataTrending.splice(15);
+ // changeTextContent.textContent = arrayDataTrending.splice(15);
+ console.log(arrayDataTrending)
+ const arrayDataTrending2=arrayDataTrending.splice(15)
+ for (let i=0;i<arrayDataTrending2.length;i++){
+
+  
+}
+for (let i=0;i<changeTextContent.length;i++){
+  changeTextContent[i].textContent=arrayDataTrending2[i]+","
+  changeTextContent[4].textContent=arrayDataTrending2[i]
+  changeTextContent[i].addEventListener("click",()=>{
+    dataSearch(arrayDataTrending2[i]);
+    resultsTittle.textContent=arrayDataTrending2[i]
+  })
+ }
+ 
+ 
+ 
+  
 }
 
 //BUSCADOR

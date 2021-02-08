@@ -1,6 +1,8 @@
+document.addEventListener("DOMContentLoaded",mostrarMisGifos());
+let misGifosArray=[
+
+]
 const apiKey = "KRtmX9CWsEGoTRAZgh6jx2eg9N7Zezg7";
-const comenzarBtn = document.querySelector(".border-and-btn").children[1]
-  .children[0];
 const pasoUno = document.querySelector(".paso-uno");
 const pasoDos = document.querySelector(".paso-dos");
 const pasoTres = document.querySelector(".paso-tres");
@@ -15,6 +17,11 @@ const animationCamera=document.querySelector(".camara-luz");
 const loaderSvg=document.createElement("svg");
 const loaderP=document.createElement("p");
 
+
+const comenzarBtn = document.querySelector(".border-and-btn").children[1]
+  .children[0];
+  
+  
 comenzarBtn.addEventListener("click", cameraAccess);
 
 function cameraAccess() {
@@ -172,6 +179,7 @@ fetch(urlId)
 ;
 
 function descargarGifLink(respuesta,downloadBtn,linkBtn){
+  console.log(respuesta)
   const url=respuesta.data.images.original.url
   const gifName=respuesta.data.title
   
@@ -215,6 +223,8 @@ setTimeout(() => {
 
         console.log(url)
       })
+    //GUARDAR MIS GIFOS EN LOCALSTORAGE
+    misGifosLocalStorage(respuesta)
 }
 
 
@@ -228,3 +238,75 @@ setTimeout(() => {
 
  
 
+function misGifosLocalStorage(respuesta){
+  misGifosObject={
+    title:respuesta.data.title,
+    url:respuesta.data.images.original.url,
+    id:respuesta.data.id
+  }
+  misGifosArray.push(misGifosObject)
+  localStorage.setItem("mis gifos", JSON.stringify(misGifosArray));
+}
+
+async function mostrarMisGifos(){
+
+  const misGifosStorage=localStorage.getItem("mis gifos");
+  misGifosArray= await JSON.parse(misGifosStorage)
+  const misGifosNoContent=document.querySelector(".mis-gifos-no-contenido")
+  const misGifosContenido=document.querySelector(".favs-gifs")
+  if (misGifosArray != "") {
+    misGifosNoContent.style.display = "none";
+    misGifosContenido.style.display="flex"
+  }
+  misGifosArray.forEach((i) => {
+    const divFavsItems = document.createElement("div");
+    divFavsItems.classList.add("img-color-container");
+    const imgFavsItems = document.createElement("img");
+    imgFavsItems.classList.add("img-width-height");
+    imgFavsItems.src = i.url;
+    imgFavsItems.alt = i.title;
+    imgFavsItems.id = i.id;
+    const divImgContainer = document.createElement("div");
+    divImgContainer.classList.add("img-container");
+    const divImgIcons = document.createElement("div");
+    divImgIcons.classList.add("img-icons");
+    const svgElementRemove = document.createElement("svg");
+    const svgElementDown = document.createElement("svg");
+    const svgElementMax = document.createElement("svg");
+    svgElementRemove.classList.add("remove-btn")
+    svgElementDown.classList.add("trending-download");
+    svgElementMax.classList.add("trending-max");
+    const divTrendingText = document.createElement("div");
+    divTrendingText.classList.add("trending-text-container");
+    const divTrendingTextP = document.createElement("p");
+    divTrendingTextP.textContent = i.user;
+    const divTrendingTextH2 = document.createElement("h2");
+    divTrendingTextH2.textContent = i.title;
+    misGifosContenido.appendChild(divFavsItems);
+    divFavsItems.appendChild(imgFavsItems);
+    divFavsItems.appendChild(divImgContainer);
+    divImgContainer.appendChild(divImgIcons);
+    divImgIcons.appendChild(svgElementRemove);
+    divImgIcons.appendChild(svgElementDown);
+    divImgIcons.appendChild(svgElementMax);
+    divImgContainer.appendChild(divTrendingText);
+    divTrendingText.appendChild(divTrendingTextP);
+    divTrendingText.appendChild(divTrendingTextH2);
+  });
+
+  misGifosContenido.addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-btn")) {
+      const elementClickedId =
+        e.target.parentNode.parentNode.parentNode.children[0].id;
+
+        for (let i = 0; i < misGifosArray.length; i++) {
+          if (misGifosArray[i].id == elementClickedId) {
+            misGifosArray.splice(i, 1);
+          }
+          localStorage.setItem("mis gifos", JSON.stringify(misGifosArray));
+        }
+        e.target.parentNode.parentNode.parentNode.remove();
+        console.log(elementClickedId)}
+  });
+    
+}
